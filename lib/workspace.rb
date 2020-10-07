@@ -10,4 +10,11 @@ class Workspace
   def select_user(user)
     raise NotImplementedError
   end
+
+  def select_channel(channel)
+    raise NotImplementedError
+
+  end
+
+
 end
