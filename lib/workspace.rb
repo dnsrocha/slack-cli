@@ -6,4 +6,8 @@ class Workspace
     @users = []
     @channels= []
   end
+
+  def select_user(user)
+    raise NotImplementedError
+  end
 end
