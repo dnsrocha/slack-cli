@@ -1,9 +1,12 @@
+require_relative 'channel.rb'
+require_relative 'user.rb'
+
 class Workspace
 
   attr_reader :users, :channels
 
   def Initialize
-    @users = []
+    @users = User.load_all
     @channels= []
   end
 

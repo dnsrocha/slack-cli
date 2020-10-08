@@ -42,18 +42,18 @@ def execute_choice(workspace, choice)
   given_channel = nil
   until choice == "quit"
     if choice == "list users"
-      tp workspace.users "username", "real_name", "slack_id"
+      tp workspace.users, "username", "real_name", "slack_id"
       puts "\n"
     elsif choice == "list channels"
-      tp workspace.channels "name", "topic", "member_count", "slack_id"
+      tp workspace.channels, "name", "topic", "member_count", "slack_id"
     elsif choice == "select user"
-      print "Please enter username or user Slack ID"
+      print "Please enter user name or user Slack ID: "
       user_info = gets.chomp
-      given_user = workspace.select_user(given_user)
+      given_user = workspace.select_user(user_info)
     elsif choice == "select channel"
-      print "Please select channel name or channel Slack ID"
+      print "Please select channel name or channel Slack ID: "
       channel_info = gets.chomp
-      given_channel = workspace.select_channel(given_channel)
+      given_channel = workspace.select_channel(channel_info)
     elsif choice == "details"
       if given_user != nil
         tp given_user.details
@@ -64,7 +64,7 @@ def execute_choice(workspace, choice)
       end
     end
 
-    puts "*********************"
+    puts "***\n"
     options_list
     choice = get_user_choice
   end
