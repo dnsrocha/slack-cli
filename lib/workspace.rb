@@ -3,11 +3,12 @@ require_relative 'user.rb'
 
 class Workspace
 
-  attr_reader :users, :channels, :selected_user, :selected_channel
+  attr_reader :users, :channels
+  attr_accessor :selected_user, :selected_channel # check if attr_accessor makes sense
 
   def Initialize
-    @users = User.load_all
-    @channels= Channel.load_all
+    @users = User.get
+    @channels= Channel.get
     @selected_user = nil
     @selected_channel = nil
   end
@@ -42,5 +43,7 @@ class Workspace
     return @selected_channel
   end
 
-
+  # def show_details
+  #
+  # end
 end
