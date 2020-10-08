@@ -42,7 +42,7 @@ def execute_choice(workspace, choice)
   given_channel = nil
   until choice == "quit"
     if choice == "list users"
-      tp workspace.users, "username", "real_name", "slack_id"
+      tp workspace.users, "user name", "real_name", "slack_id"
       puts "\n"
     elsif choice == "list channels"
       tp workspace.channels, "name", "topic", "member_count", "slack_id"
