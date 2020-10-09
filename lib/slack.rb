@@ -1,21 +1,17 @@
 #!/usr/bin/env ruby
-require 'dotenv'
-require 'httparty'
+# require 'dotenv'
 require 'table_print'
-
 require_relative 'workspace.rb'
 
-Dotenv.load
+# Dotenv.load
 
 def main
   puts "Welcome to the Ada Slack CLI!"
-  workspace = Workspace.new
+  workspace = SlackCli::Workspace.new
 
   options_list
   choice = get_user_choice
-
   execute_choice(workspace, choice)
-  # TODO project
 
   puts "Thank you for using the Ada Slack CLI"
 end
@@ -42,31 +38,27 @@ def execute_choice(workspace, choice)
   given_channel = nil
   until choice == "quit"
     if choice == "list users"
-      # tp workspace.users, "user name", "real_name", "slack_id"
-      User.list_all
+      tp workspace.users_list, "username", "real_name", "slack_id"
       puts "\n"
     elsif choice == "list channels"
-      # tp workspace.channels, "name", "topic", "member_count", "slack_id"
-      Channel.list_all
+      tp workspace.channels_list, "name", "topic", "member_count", "slack_id"
     elsif choice == "select user"
-      User.list_all
-      print "Please enter user name or user Slack ID: "
+      workspace.users_list
+      print "Please enter username or Slack ID: "
       user_info = gets.chomp
       given_user = workspace.select_user(user_info)
-      puts given_user
     elsif choice == "select channel"
-      Channel.list_all
-      print "Please select channel name or channel Slack ID: "
+      SlackCli::Channel.list_all
+      print "Please select channel name or Slack ID: "
       channel_info = gets.chomp
       given_channel = workspace.select_channel(channel_info)
-      puts given_channel
     elsif choice == "details"
       if given_user != nil
-        tp given_user.details
+        puts given_user
       elsif given_channel != nil
-        tp given_channel.details
+        puts given_channel
       else
-        puts "No user or channel selected"
+        puts "There is no user or channel that matches your search"
       end
     end
 

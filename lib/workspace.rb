@@ -1,49 +1,51 @@
 require_relative 'channel.rb'
 require_relative 'user.rb'
 
-class Workspace
+module SlackCLI
+  class Workspace
 
-  attr_reader :users, :channels
-  attr_accessor :selected_user, :selected_channel # check if attr_accessor makes sense
+    attr_reader :users, :channels
 
-  def Initialize
-    @users = User.get
-    @channels= Channel.get
-    @selected_user = nil
-    @selected_channel = nil
-  end
+    def Initialize
+      @users = User.list_all
+      @channels= Channel.list_all
+    end
 
-  def select_user(user_info)
-    name_search = @users.find{|user| user.name == user_info}
+    def users_list
+      return @users
+    end
 
-    id_search = @users.find{|user| user.slack_id == user_info}
+    def channels_list
+      return @channels
+    end
 
-    if name_search.nil?
-      @selected_user = id_search
-    elsif id_search.nil?
-      @selected_user = name_search
-    else
+    def select_user(user_info)
+      name_search = @users.find{|user| user.username == user_info}
+      id_search = @users.find{|user| user.slack_id == user_info}
+
+      if name_search.nil?
+        @selected_user = id_search
+      elsif id_search.nil?
+        @selected_user = name_search
+      else
       puts "Invalid User name or ID"
+      end
+      return @selected_user
     end
-    return @selected_user
-  end
 
-  def select_channel(channel_info)
-    name_search = @channels.find{|channel| channel.name == channel_info}
+    def select_channel(channel_info)
+      name_search = @channels.find{|channel| channel.name == channel_info}
+      id_search = @channels.find{|channel| channel.slack_id == channel_info}
 
-    id_search = @channels.find{|channel| channel.slack_id == channel_info}
-
-    if name_search.nil?
-      @selected_channel = id_search
-    elsif id_search.nil?
-      @selected_channel = name_search
-    else
-      puts "Invalid Channel name or ID"
+      if name_search.nil?
+        @selected_channel = id_search
+      elsif id_search.nil?
+        @selected_channel = name_search
+      else
+        puts "Invalid Channel name or ID"
+      end
+      return @selected_channel
     end
-    return @selected_channel
-  end
 
-  # def show_details
-  #
-  # end
+  end
 end
