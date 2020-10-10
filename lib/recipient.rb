@@ -8,6 +8,7 @@ URL = "https://slack.com/api/"
 
 module SlackCLI
   class Recipient
+
     attr_reader :slack_id
 
     def initialize(slack_id)
@@ -15,8 +16,10 @@ module SlackCLI
     end
 
     def self.list_all(list)
-      url = "#{URL}"<<"#{list}"
+      url = "#{URL}#{list}"
+      puts url
       query_params = {token: TOKEN}
+      puts query_params
       response = HTTParty.get(url, query: query_params)
       return response
     end

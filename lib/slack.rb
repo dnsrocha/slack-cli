@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
-require 'dotenv'
 require 'table_print'
-require_relative 'workspace.rb'
-
-Dotenv.load
+require_relative 'workspace'
 
 def main
   puts "Welcome to the Ada Slack CLI!"

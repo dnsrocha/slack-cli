@@ -1,5 +1,8 @@
-require_relative 'recipient.rb'
+require_relative 'recipient'
 require 'httparty'
+require 'dotenv'
+
+Dotenv.load
 
 module SlackCLI
   class User < Recipient
@@ -19,9 +22,10 @@ module SlackCLI
     #will retrieve users data from the API using URL
     def self.list_all
       response = super('users.list')
+      puts response
       users = []
       response["members"].each do |user|
-        users << User.new(username: user["name"], real_name: user["real_name"], slack_id: user["id "])
+        users << User.new(user["name"], user["real_name"], user["id"])
       end
       return users
     end
