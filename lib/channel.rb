@@ -22,7 +22,7 @@ module SlackCLI
       response = super('conversations.list')
       channels = []
       response["channels"].each do |channel|
-        channels << Channel.new(channel["name"], channel["id"], channel["topic"]["value"], channel["num_members"].to_i)
+        channels << Channel.new(channel["name"], channel["id"], channel["num_members"].to_i, channel["topic"]["value"])
       end
       return channels
     end
