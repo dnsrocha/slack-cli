@@ -30,16 +30,8 @@ def get_user_choice
   return user_choice
 end
 
-def valid_msg(recipient)
-  puts "Please type your message:"
-  user_msg = gets.chomp
-  recipient.send_message(user_msg)
-  return "Success!"
-end
-
 def execute_choice(workspace, choice)
-  given_user = nil
-  given_channel = nil
+  given_data = nil
   until choice == "quit"
     if choice == "list users"
       tp workspace.users_list, "username", "real_name", "slack_id"
@@ -47,34 +39,39 @@ def execute_choice(workspace, choice)
     elsif choice == "list channels"
       tp workspace.channels_list, "name", "topic", "member_count", "slack_id"
     elsif choice == "select user"
-      workspace.users_list
       print "Please enter username or Slack ID: "
       user_info = gets.chomp
-      given_user = workspace.select_user(user_info)
+      given_data = workspace.select_user(user_info)
+      if given_data.nil?
+        puts "User not found"
+      end
     elsif choice == "select channel"
-      workspace.channels_list
       print "Please select channel name or Slack ID: "
       channel_info = gets.chomp
-      given_channel = workspace.select_channel(channel_info)
+      given_data = workspace.select_channel(channel_info)
+      if given_data.nil?
+        puts "Channel not found."
+      end
     elsif choice == "details"
-      if given_user != nil
-        puts given_user
-      elsif given_channel != nil
-        puts given_channel
+      if given_data != nil
+        puts given_data.details
+      elsif given_data != nil
+        puts given_data.details
       else
         puts "There is no user or channel that matches your search"
       end
     elsif choice == "send message"
-      if given_user.nil? && given_channel.nil?
+      if given_data.nil?
         puts "Cannot send message. Please choose a recipient first."
-      elsif given_user != nil
-        valid_msg(given_user)
-      elsif given_channel != nil
-        valid_msg(given_channel)
+      else
+        puts "Please type your message:"
+        user_msg = gets.chomp
+        given_data.send_message(user_msg)
+        puts "Success!"
       end
     end
 
-    puts "***\n"
+    puts "*****\n\n"
     options_list
     choice = get_user_choice
   end

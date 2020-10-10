@@ -16,10 +16,8 @@ module SlackCLI
     end
 
     def self.list_all(list)
-      url = "#{URL}#{list}"
-      puts url
+      url = "#{URL}"<<"#{list}"
       query_params = {token: TOKEN}
-      puts query_params
       response = HTTParty.get(url, query: query_params)
       return response
     end

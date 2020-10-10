@@ -34,7 +34,7 @@ module SlackCLI
     end
 
     def select_channel(channel_info)
-      name_search = @channels.find{|channel| channel.name == channel_info}
+      name_search = @channels.find{|channel| channel.channel_name == channel_info}
       id_search = @channels.find{|channel| channel.slack_id == channel_info}
 
       if name_search.nil?
