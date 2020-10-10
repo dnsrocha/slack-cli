@@ -18,8 +18,8 @@ describe "User Class" do
       it "Returns a list of users" do
         VCR.use_cassette "user_list" do
           result = SlackCLI::User.list_all
+          expect(result).must_be_kind_of Array
         end
-        expect(result).must_be_kind_of Array
       end
 
     end

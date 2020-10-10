@@ -16,9 +16,9 @@ describe "class Channel" do
 
     it "returns a list of channels" do
       VCR.use_cassette "channels_list" do
-        result = SlackCLI::Channel.list_all
+        response = SlackCLI::Channel.list_all
+        expect(response).must_be_kind_of Array
       end
-      expect(result).must_be_kind_of Array
     end
 
   end
