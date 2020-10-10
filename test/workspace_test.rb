@@ -25,29 +25,33 @@ end
 
 
     it "selects user correctly" do
-      expect(@fake_workspace.select_user("Bot")).must_be_instance_of SlackCLI::User
+      VCR.use_cassette("select user") do
+        response = SlackCLI::Workspace.new
+        selected_user = response.select_user("Bot")
+        expect(selected_user).must_be_kind_of SlackCli::Users
+      end
     end
 
     it "selects channel correctly" do
-      expect(@fake_workspace.select_channel("TPLIWDOP3D")).must_be_instance_of SlackCLI::Channel
+      VCR.use_cassette("select channel") do
+        response = SlackCLI::Workspace.new
+        selected_channel = response.select_channel("seattle-stuff")
+        expect(selected_channel).must_be_kind_of SlackCli::Channels
+      end
     end
 
-    it "returns desired user when searching by name or id" do
-      expect(@fake_workspace.select_user("O0SIDJF9IA")).must_equal "username: Bot\nSlack ID: O0SIDJF9IA\nreal name: Slack Bot"
-      expect(@fake_workspace.select_user("Bot")).must_equal "username: Bot\nSlack ID: O0SIDJF9IA\nreal name: Slack Bot"
-    end
 
-    it "returns desired channel when searching by name or id" do
-      expect(@fake_workspace.select_channel("U786YWDVC3D")).must_equal "channel name: seattle-stuff\nSlack ID:U786YWDVC3D\nmember count: 71\ntopic: coffee shops"
-      expect(@fake_workspace.select_channel("seattle-stuff")).must_equal "channel name: seattle-stuff\nSlack ID:U786YWDVC3D\nmember count: 71\ntopic: coffee shops"
-    end
+    it "returns nil if input is invalid" do
+      VCR.use_cassette("user_not_found") do
+        response = SlackCLI::Workspace.new
+        selected_user = response.select_user("Paris")
+        expect(selected_user).must_be_nil
+      end
 
-    it "returns a message if input is invalid" do
-      expect(@fake_workspace.select_user("lunch break")).must_equal "Invalid Channel name or ID"
-      expect(@fake_workspace.select_user("@")).must_be_nil
-
-      expect(@fake_workspace.select_channel("paris")).must_equal "Invalid Channel name or ID"
-      expect(@fake_workspace.select_user("abc")).must_be_nil
+      VCR.use_cassette("channel_not_found") do
+        response = SlackCLI::Workspace.new
+        selected_channel = response.select_channel("breakfast")
+        expect(selected_channel).must_be_nil
+      end
     end
   end
-end
