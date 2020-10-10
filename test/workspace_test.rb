@@ -1,34 +1,30 @@
 require_relative 'test_helper'
 
 describe "Workspace class" do
-  before do
-    @users = SlackCLI::User.new("ruby", "ruby mine", "PM15QINBXFZ")
-    @channel = SlackCLI::Channel.new("seattle-stuff", "U786YWDVC3D", 71, "coffee shops")
-    @fake_workspace = SlackCLI::Workspace.new
-  end
 
   it "returns a list of users correctly" do
-    expect(@fake_workspace.users_list).must_be_kind_of Array
-    expect(@fake_workspace.channels_list).must_be_kind_of Array
+    VCR.use_cassette("users_list") do
+      response = SlackCLI::Workspace.new
+      expect(response.users_list).must_be_kind_of Array
+    end
+  end
+
+  it "returns a list of channels correctly" do
+    VCR.use_cassette("channels_list") do
+      response = SlackCLI::Workspace.new
+      expect(response.channels_list).must_be_kind_of Array
+    end
   end
 end
 
 
-  describe "select user" do
-    before do
-      @users = SlackCLI::User.new("Bot", "Slack Bot", "O0SIDJF9IA")
-      @other_user = SlackCLI::User.new("ruby", "ruby mine", "PM15QINBXFZ")
-      @channel = SlackCLI::Channel.new("test_channel_denise", "TPLIWDOP3D", 12, "cats")
-      @other_channel = SlackCLI::Channel.new( "seattle-stuff", "U786YWDVC3D", 71, "coffee shops")
-      @fake_workspace = SlackCLI::Workspace.new
-    end
-
+  describe "select user or channel" do
 
     it "selects user correctly" do
-      VCR.use_cassette("select user") do
+      VCR.use_cassette("select_user") do
         response = SlackCLI::Workspace.new
-        selected_user = response.select_user("Bot")
-        expect(selected_user).must_be_kind_of SlackCli::Users
+        user = response.select_user("drocha")
+        expect(user).must_be_kind_of SlackCLI::User
       end
     end
 
@@ -36,7 +32,7 @@ end
       VCR.use_cassette("select channel") do
         response = SlackCLI::Workspace.new
         selected_channel = response.select_channel("seattle-stuff")
-        expect(selected_channel).must_be_kind_of SlackCli::Channels
+        expect(selected_channel).must_be_kind_of SlackCLI::Channel
       end
     end
 
