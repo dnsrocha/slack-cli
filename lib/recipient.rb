@@ -21,6 +21,21 @@ module SlackCLI
       return response
     end
 
+    def send_message(message)
+      url = "#{URL}chat.postMessage"
+
+      response = HTTParty.post(url,
+                               headers: {'Content-Type' => 'application/x-www-form-urlencoded'},
+                               body: {
+                                   token: TOKEN,
+                                   channel: slack_id,
+                                   text: message
+                               })
+      unless response.code == 200
+        raise ArgumentError.new("Request Error")
+      end
+      return true
+    end
 
   end
 end

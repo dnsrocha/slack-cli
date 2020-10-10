@@ -15,4 +15,6 @@ describe "Recipient class" do
     end
   end
 
+
+
 end

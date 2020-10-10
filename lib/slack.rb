@@ -7,7 +7,7 @@ require_relative 'workspace.rb'
 
 def main
   puts "Welcome to the Ada Slack CLI!"
-  workspace = SlackCli::Workspace.new
+  workspace = SlackCLI::Workspace.new
 
   options_list
   choice = get_user_choice
@@ -18,19 +18,26 @@ end
 
 def options_list
   print "Choose from the following:\n"
-  puts "list users\nlist channels\nselect user\nselect channel\ndetails\nquit"
+  puts "list users\nlist channels\nselect user\nselect channel\ndetails\nsend message\nquit"
 end
 
 def get_user_choice
   user_choice = gets.chomp
-  options = ["list users", "list channels", "quit", "select user", "select channel", "details"]
+  options = ["list users", "list channels", "quit", "select user", "select channel", "details", "send message"]
 
   until options.include?(user_choice)
-    puts "Invalid option. Please type: list users, list channels, select user, select channel, details or quit"
+    puts "Invalid option. Please type: list users, list channels, select user, select channel, details, send message or quit"
     user_choice = gets.chomp
   end
 
   return user_choice
+end
+
+def valid_msg(recipient)
+  puts "Please type your message:"
+  user_msg = gets.chomp
+  recipient.send_message(user_msg)
+  return "Success!"
 end
 
 def execute_choice(workspace, choice)
@@ -48,7 +55,7 @@ def execute_choice(workspace, choice)
       user_info = gets.chomp
       given_user = workspace.select_user(user_info)
     elsif choice == "select channel"
-      SlackCli::Channel.list_all
+      workspace.channels_list
       print "Please select channel name or Slack ID: "
       channel_info = gets.chomp
       given_channel = workspace.select_channel(channel_info)
@@ -59,6 +66,14 @@ def execute_choice(workspace, choice)
         puts given_channel
       else
         puts "There is no user or channel that matches your search"
+      end
+    elsif choice == "send message"
+      if given_user.nil? && given_channel.nil?
+        puts "Cannot send message. Please choose a recipient first."
+      elsif given_user != nil
+        valid_msg(given_user)
+      elsif given_channel != nil
+        valid_msg(given_channel)
       end
     end
 
