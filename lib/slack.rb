@@ -37,7 +37,7 @@ def execute_choice(workspace, choice)
       tp workspace.users.list, "username", "slack_id", "real_name"
       puts "\n"
     elsif choice == "list channels"
-      tp workspace.channels_list, "name", "slack_id", "topic", "member_count"
+      tp workspace.channels_list, "channel_name", "slack_id", "topic", "member_count"
     elsif choice == "select user"
       print "Please enter username or Slack ID: "
       user_info = gets.chomp

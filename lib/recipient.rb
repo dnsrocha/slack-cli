@@ -29,7 +29,7 @@ module SlackCLI
                                headers: {'Content-Type' => 'application/x-www-form-urlencoded'},
                                body: {
                                    token: TOKEN,
-                                   channel: slack_id,
+                                   channel: @slack_id,
                                    text: message
                                })
       unless response.code == 200
